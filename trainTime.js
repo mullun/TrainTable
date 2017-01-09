@@ -13,99 +13,92 @@ firebase.initializeApp(config);
 // Create a variable to reference the database
 
 var database = firebase.database();
-console.log("database = " + database);
 // Initial Values
+
 var namesAndTimes = [];
-
-var tempNamesAndTimes = database;
-console.log("tempNamesAndTimes 0 = " + tempNamesAndTimes[0]);
-
-var train0 = {
-    name : "Train Zero",
-    destination : "Chicago",
-    frequency : 34,
-    nextArrival : 34,
-    minutesAway : 34
-};
-
-namesAndTimes.push(train0);
-console.log("names and trains = " + namesAndTimes[0].name);
-
-var trainNameDiv = $("<div>");
-trainNameDiv.addClass("train-name");
-trainNameDiv.addClass("col-sm-3");
-trainNameDiv.html("<b>"+namesAndTimes[0].name+"</b>");
-$("#tableContentsDiv").append(trainNameDiv);
-
-var destinationDiv = $("<div>");
-destinationDiv.addClass("columnDestination");
-destinationDiv.addClass("col-sm-3");
-destinationDiv.html("<b>"+namesAndTimes[0].destination+"</b>");
-$("#tableContentsDiv").append(destinationDiv);
-
-var frequencyDiv = $("<div>");
-frequencyDiv.addClass("columnFrequency");
-frequencyDiv.addClass("col-sm-2");
-frequencyDiv.html("<b>"+namesAndTimes[0].frequency+"</b>");
-$("#tableContentsDiv").append(frequencyDiv);
-
-var nextArrivalDiv = $("<div>");
-nextArrivalDiv.addClass("columnNextArrival");
-nextArrivalDiv.addClass("col-sm-2");
-nextArrivalDiv.html("<b>"+namesAndTimes[0].nextArrival+"</b>");
-$("#tableContentsDiv").append(nextArrivalDiv);
-
-var minutesAwayDiv = $("<div>");
-minutesAwayDiv.addClass("columnMinutesAway");
-minutesAwayDiv.addClass("col-sm-2");
-minutesAwayDiv.html("<b>"+namesAndTimes[0].minutesAway+"</b>");
-$("#tableContentsDiv").append(minutesAwayDiv);
-
-
-
-var initialBid = 0;
-var initialBidder = "Still waiting";
-var highPrice = initialBid;
-var highBidder = initialBidder;
-
-// --------------------------------------------------------------
 
 // At the initial load, get a snapshot of the current data.
 database.ref().on("value", function(snapshot) {
 
-  // If Firebase has a highPrice and highBidder stored (first case)
-  if (snapshot.child("highBidder").exists() && snapshot.child("highPrice").exists()) {
+  var tempNamesAndTimes = snapshot.val();
+  var numberOfTrains = tempNamesAndTimes.length;
+  $("#tableContentsDiv").empty();
 
-    // Set the initial variables for highBidder equal to the stored values.
-    highBidder = snapshot.val().highBidder;
-    highPrice = parseInt(snapshot.val().highPrice);
+  for (var i = 0; i < numberOfTrains; i++) {
+    console.log("initial load or Value Change");
+    console.log(tempNamesAndTimes[i]);
+    namesAndTimes.push(tempNamesAndTimes[i])
 
-    // Change the HTML to reflect the initial value
-    $('#highest-bidder').html(snapshot.val().highBidder);
-    $('#highest-price').html("$" + snapshot.val().highPrice);
+    var trainNameDiv = $("<div>");
+    trainNameDiv.addClass("train-name");
+    trainNameDiv.addClass("col-sm-3");
+    trainNameDiv.html("<b>"+namesAndTimes[i].name+"</b>");
+    $("#tableContentsDiv").append(trainNameDiv);
 
-    // Print the initial data to the console.
-    console.log(snapshot.val().highBidder);
-    console.log(snapshot.val().highPrice)
+    var destinationDiv = $("<div>");
+    destinationDiv.addClass("columnDestination");
+    destinationDiv.addClass("col-sm-3");
+    destinationDiv.html("<b>"+namesAndTimes[i].destination+"</b>");
+    $("#tableContentsDiv").append(destinationDiv);
+
+    var frequencyDiv = $("<div>");
+    frequencyDiv.addClass("columnFrequency");
+    frequencyDiv.addClass("col-sm-2");
+    frequencyDiv.html("<b>"+namesAndTimes[i].frequency+"</b>");
+    $("#tableContentsDiv").append(frequencyDiv);
+
+    var nextArrivalDiv = $("<div>");
+    nextArrivalDiv.addClass("columnNextArrival");
+    nextArrivalDiv.addClass("col-sm-2");
+    nextArrivalDiv.html("<b>"+namesAndTimes[i].nextArrival+"</b>");
+    $("#tableContentsDiv").append(nextArrivalDiv);
+
+    var minutesAwayDiv = $("<div>");
+    minutesAwayDiv.addClass("columnMinutesAway");
+    minutesAwayDiv.addClass("col-sm-2");
+    minutesAwayDiv.html("<b>"+namesAndTimes[i].minutesAway+"</b>");
+    $("#tableContentsDiv").append(minutesAwayDiv);
   }
-
-  // Keep the initial variables for highBidder equal to the initial values
-  else {
-
-    // Change the HTML to reflect the initial value
-    $('#highest-bidder').html(highBidder);
-    $('#highest-price').html("$" + highPrice);
-
-    // Print the initial data to the console.
-    console.log("Current High Price")
-    console.log(highBidder);
-    console.log(highPrice)
-  }
-
 // If any errors are experienced, log them to console.
-}, function(errorObject) {
-  console.log("The read failed: " + errorObject.code);
 });
+
+// Initialize table of trains
+// $("#tableContentsDiv").empty();
+
+// numberOfTrains = namesAndTimes.length;
+// for (var i = 0; i < numberOfTrains; i ++) {
+
+//   var trainNameDiv = $("<div>");
+//   trainNameDiv.addClass("train-name");
+//   trainNameDiv.addClass("col-sm-3");
+//   trainNameDiv.html("<b>"+namesAndTimes[i].name+"</b>");
+//   $("#tableContentsDiv").append(trainNameDiv);
+
+//   var destinationDiv = $("<div>");
+//   destinationDiv.addClass("columnDestination");
+//   destinationDiv.addClass("col-sm-3");
+//   destinationDiv.html("<b>"+namesAndTimes[i].destination+"</b>");
+//   $("#tableContentsDiv").append(destinationDiv);
+
+//   var frequencyDiv = $("<div>");
+//   frequencyDiv.addClass("columnFrequency");
+//   frequencyDiv.addClass("col-sm-2");
+//   frequencyDiv.html("<b>"+namesAndTimes[i].frequency+"</b>");
+//   $("#tableContentsDiv").append(frequencyDiv);
+
+//   var nextArrivalDiv = $("<div>");
+//   nextArrivalDiv.addClass("columnNextArrival");
+//   nextArrivalDiv.addClass("col-sm-2");
+//   nextArrivalDiv.html("<b>"+namesAndTimes[i].nextArrival+"</b>");
+//   $("#tableContentsDiv").append(nextArrivalDiv);
+
+//   var minutesAwayDiv = $("<div>");
+//   minutesAwayDiv.addClass("columnMinutesAway");
+//   minutesAwayDiv.addClass("col-sm-2");
+//   minutesAwayDiv.html("<b>"+namesAndTimes[i].minutesAway+"</b>");
+//   $("#tableContentsDiv").append(minutesAwayDiv);
+
+// }
 
 // --------------------------------------------------------------
 
@@ -128,23 +121,23 @@ $("#submit-train-info").on("click", function(event) {
 
   var lengthOfArray = namesAndTimes.length;
   console.log("number of trains = " + lengthOfArray);
-  var newTrain = "train"+lengthOfArray;
+  var newTrain = "train" + lengthOfArray;
   console.log("index of new train = " + newTrain);
 
   var newTrain = {
       name : trainName,
       destination : destination,
       frequency : frequency,
-      nextArrival : 34,
-      minutesAway : 34
+      nextArrival : 22,
+      minutesAway : 33
   };
 
   namesAndTimes.push(newTrain);
   console.log("names and trains = " + namesAndTimes);
-    // Save the new price in Firebase
+    // Save the new train details in Firebase
     database.ref().set(namesAndTimes);
 
-    // Log the new High Price
+    // Log the new train details
     console.log("New Train info received");
     console.log(trainName);
     console.log(destination);
@@ -164,14 +157,9 @@ $("#submit-train-info").on("click", function(event) {
     }
     console.log("after while " + timeToNextTrain);
 
-    // Change the HTML to reflect the new high price and bidder
-    $("#highest-bidder").html(bidderName);
-    $("#highest-price").html("$" +  bidderPrice);
-  // }
+    // temp values for these two variables
+    var nextArrival = 99;
+    var minutesAway = 99; 
 
-  // else {
-  //   // Alert
-  //   alert("Someone else thinks it is worth more. Try again.");
-  // }
-
-});
+    console.log("latest train info displayed")
+  });
