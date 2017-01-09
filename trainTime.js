@@ -17,7 +17,8 @@ console.log("database = " + database);
 // Initial Values
 var namesAndTimes = [];
 
-// namesAndTimes.push(database[0]);
+var tempNamesAndTimes = database;
+console.log("tempNamesAndTimes 0 = " + tempNamesAndTimes[0]);
 
 var train0 = {
     name : "Train Zero",
