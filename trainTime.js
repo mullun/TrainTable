@@ -1,14 +1,14 @@
 // Initialize Firebase
 
- var config = {
-    apiKey: "AIzaSyAcMaCtF9wngaAIAtFJAeF7Q2xkzFDjud0",
-    authDomain: "firstfirebasetrinity.firebaseapp.com",
-    databaseURL: "https://firstfirebasetrinity.firebaseio.com",
-    storageBucket: "firstfirebasetrinity.appspot.com",
-    messagingSenderId: "551160138408"
-  };
+var config = {
+  apiKey: "AIzaSyAcMaCtF9wngaAIAtFJAeF7Q2xkzFDjud0",
+  authDomain: "firstfirebasetrinity.firebaseapp.com",
+  databaseURL: "https://firstfirebasetrinity.firebaseio.com",
+  storageBucket: "firstfirebasetrinity.appspot.com",
+  messagingSenderId: "551160138408"
+};
 
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 
 // Create a variable to reference the database
 
@@ -21,8 +21,8 @@ var timeTillNextTrain;
 var nextTrainTime;
 
 // var newTrain = {
-//       name : "trainName",
-//       destination : "destination",
+//       name : "Azalea",
+//       destination : "Chicago",
 //       frequency : 55,
 //       nextArrival : 22,
 //       minutesAway : 33
@@ -34,17 +34,17 @@ var nextTrainTime;
 // database.ref().set(namesAndTimes);
 
 
-// At the initial load, get a snapshot of the current data.
+// If value in database changes, get a snapshot of the current data.
 database.ref().on("value", function(snapshot) {
 
   var tempNamesAndTimes = snapshot.val();
   var numberOfTrains = tempNamesAndTimes.length;
   $("#tableContentsDiv").empty();
+  console.log("initial load or Value Change");
+  namesAndTimes = [];
 
   for (var i = 0; i < numberOfTrains; i++) {
-    console.log("initial load or Value Change");
-    console.log(tempNamesAndTimes[i]);
-    namesAndTimes.push(tempNamesAndTimes[i])
+    namesAndTimes.push(tempNamesAndTimes[i]);
 
     var trainNameDiv = $("<div>");
     trainNameDiv.addClass("train-name");
@@ -92,6 +92,12 @@ $("#submit-train-info").on("click", function(event) {
   var firstTrainTime = $("#first-train-time").val().trim();
   var frequency = $("#frequency").val().trim();
 
+  console.log("New Train info received");
+  console.log("trainName = " + trainName);
+  console.log("destination = " + destination);
+  console.log("firstTrainTime = " + moment(firstTrainTime, "HH:mm").format("h:mm a"));
+  console.log("frequency = " + frequency);
+
   // Check to see if it already exists
   // if (trainName in namesAndTimes) {
 
@@ -126,7 +132,7 @@ $("#submit-train-info").on("click", function(event) {
 
   } else {
     // time of first train is after current time
-    timeTillNextTrain = moment(firstTrainMoment).diff(currentTime, "minutes");
+    timeTillNextTrain = moment(firstTrainTime).diff(currentTime, "minutes");
     console.log("time till next train = " + timeTillNextTrain);
     nextTrainTime = moment(firstTrainTime).format("h:mm a");
   }
@@ -140,16 +146,12 @@ $("#submit-train-info").on("click", function(event) {
   };
 
   namesAndTimes.push(newTrain);
-  console.log("names and trains = " + namesAndTimes);
-    // Save the new train details in Firebase
+  console.log("names and trains getting set to database");
+  // Save the new train details in Firebase
   database.ref().set(namesAndTimes);
 
   // Log the new train details
-  console.log("New Train info received");
-  console.log("trainName = " + trainName);
-  console.log("destination = " + destination);
-  console.log("firstTrainTime = " + firstTrainTime);
-  console.log("frequency = " + frequency);
+
 
 
 // // find the time of next train
@@ -169,10 +171,6 @@ $("#submit-train-info").on("click", function(event) {
 
 //   console.log(firstTrainMoment.isBefore(currentTime));
 
-
-
-
-
 //   firstTrainTime = moment(firstTrainTime, 'HH:ss');
 //   console.log("firstTrainTime formatted = " + firstTrainTime);
 
@@ -188,7 +186,5 @@ $("#submit-train-info").on("click", function(event) {
 //   // temp values for these two variables
 //   var nextArrival = 99;
 //   var minutesAway = 99; 
-
-  console.log("latest train info displayed")
  
 });
