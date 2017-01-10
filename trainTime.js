@@ -24,8 +24,8 @@ var nextTrainTime;
 //       name : "Azalea",
 //       destination : "Chicago",
 //       frequency : 55,
-//       nextArrival : 22,
-//       minutesAway : 33
+//       nextArrival : 55,
+//       minutesAway : 55
 //   };
 
 // namesAndTimes.push(newTrain);
@@ -97,6 +97,13 @@ $("#submit-train-info").on("click", function(event) {
   console.log("destination = " + destination);
   console.log("firstTrainTime = " + moment(firstTrainTime, "HH:mm").format("h:mm a"));
   console.log("frequency = " + frequency);
+
+  // clear the input cells
+  $('#train-name').val("");
+  $('#destination').val("");
+  $("#first-train-time").val("");
+  $("#frequency").val("");
+
 
   // Check to see if it already exists
   // if (trainName in namesAndTimes) {
